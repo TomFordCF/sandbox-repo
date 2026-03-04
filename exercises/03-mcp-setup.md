@@ -49,7 +49,7 @@ A file called `settings.json` will open. This file controls VS Code's behaviour 
 
 ### Step 2 — Add the MCP server block
 
-MCP servers live inside an `"mcp"` block in your `settings.json`. The full configuration for all three servers covered in this exercise looks like this — paste it into your settings file, then replace each placeholder value with your real credentials (see the sections below for exactly where to get each one):
+MCP servers live inside an `"mcp"` block in your `settings.json`. The full configuration for all four servers covered in this exercise looks like this — paste it into your settings file, then replace each placeholder value with your real credentials (see the sections below for exactly where to get each one):
 
 ```json
 {
@@ -81,6 +81,15 @@ MCP servers live inside an `"mcp"` block in your `settings.json`. The full confi
           "MIXPANEL_SERVICE_ACCOUNT_USERNAME": "your-service-account-username",
           "MIXPANEL_SERVICE_ACCOUNT_SECRET": "your-service-account-secret",
           "MIXPANEL_PROJECT_ID": "your-project-id"
+        }
+      },
+
+      "slack": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-slack"],
+        "env": {
+          "SLACK_BOT_TOKEN": "xoxb-your-bot-token",
+          "SLACK_TEAM_ID": "your-workspace-team-id"
         }
       }
 
@@ -116,6 +125,17 @@ Atlassian uses a single API token for all its products (Confluence, Jira, etc.).
 2. Click **Add Service Account**, give it a name, and note the username and secret it generates.
 3. Find your Project ID under **Settings → Project Settings**.
 4. Paste all three values into the corresponding fields in `settings.json`.
+
+**Slack — Bot Token**
+
+Slack requires you to create a small internal app to generate a bot token. It sounds more involved than it is.
+
+1. Go to **[api.slack.com/apps](https://api.slack.com/apps)** and click **Create New App → From scratch**.
+2. Give it a name (e.g. "Copilot MCP") and select your workspace.
+3. In the left menu, go to **OAuth & Permissions**. Under **Scopes → Bot Token Scopes**, add the following: `channels:history`, `channels:read`, `groups:read`, `im:read`, `mpim:read`, `users:read`.
+4. Scroll up and click **Install to Workspace**, then **Allow**.
+5. Copy the **Bot User OAuth Token** (it starts with `xoxb-`) and paste it as `SLACK_BOT_TOKEN`.
+6. To find your Team ID: in Slack, click your workspace name → **Settings & administration → Workspace settings**. The Team ID appears in the browser URL — it's the string starting with `T` (e.g. `T01AB2CD3EF`). Paste it as `SLACK_TEAM_ID`.
 
 ### Step 4 — Restart and verify
 
@@ -214,6 +234,33 @@ The three scenarios below show how you'd use connected MCP servers as a PM. Thes
 > Want me to adjust the tone or length, or pull in a specific data point to support the argument further?
 
 **Why this matters:** PMs spend significant time extracting metrics from one tool and translating them into narratives in another. With Mixpanel connected, you move from raw engagement data to a first-draft argument in one step — and you can iterate on the framing without going back to the dashboard every time.
+
+---
+
+### Example 4 — Slack: surfacing decisions buried in conversation
+
+**The scenario:** A key decision about the notification model was discussed in a Slack thread two weeks ago, but it never made it into the decisions log. You need to find it, confirm what was actually agreed, and get it documented before the next planning session.
+
+**You type in Copilot Chat:**
+
+> *"Using the Slack MCP, search the #meridian-product channel for conversations about notification preferences or opt-in/opt-out from the last 30 days. Summarise what was discussed and whether a clear decision was reached. Then compare that to what's currently written in docs/decisions-log.md Decision 5 and tell me if there's anything missing or contradictory."*
+
+**Example response from Copilot:**
+
+> I searched the #meridian-product channel for the last 30 days and found a relevant thread from 19 January 2026. Here's a summary:
+>
+> **What was discussed:**
+> Sarah Chen raised the notification model question and proposed opt-out as the default. Marcus Webb agreed but flagged that the suppression option needs to be surfaced clearly in the meeting UI — not buried in settings. Priya Nair confirmed she'd add the suppress toggle to the host controls screen. Three people reacted with ✅.
+>
+> **Comparison with decisions-log.md Decision 5:**
+> The core opt-out decision is accurately captured. However, Decision 5 doesn't mention the specific design requirement flagged by Marcus — that the suppress option must be visible in the meeting UI, not only in settings. This nuance is in the Slack thread but not in the formal log.
+>
+> **Suggested addition to Decision 5:**
+> *"The opt-out suppress control must be accessible directly from the meeting host UI — not only from account settings — to ensure consultants can act on it in the moment. This was agreed by Marcus Webb and confirmed by Priya Nair on 19 January 2026."*
+>
+> Would you like me to add this to the decisions log now?
+
+**Why this matters:** Slack is where real decisions often actually happen — in threads, in reactions, in quick back-and-forths that never make it into formal documentation. With Slack connected, Copilot can surface those conversations and reconcile them with your written records, closing the gap between what was agreed and what got written down.
 
 ---
 
