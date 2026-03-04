@@ -49,7 +49,7 @@ A terminal panel will appear at the bottom of your screen. This is where you'll 
 Cloning means downloading a full copy of this repository to your laptop. Type this command, replacing the URL with the one for this repo (you can find it by clicking the green **Code** button on the GitHub page and copying the HTTPS link):
 
 ```
-git clone https://github.com/YOUR-ORG/sandbox-repo.git
+git clone https://github.com/TomFordCF/sandbox-repo.git
 ```
 
 Press **Enter**. After a few seconds, you should see something like:
@@ -251,7 +251,7 @@ You should see:
 ```
 Enumerating objects: 7, done.
 Counting objects: 100% (7/7), done.
-To https://github.com/YOUR-ORG/sandbox-repo.git
+To https://github.com/TomFordCF/sandbox-repo.git
  * [new branch]      your-name/update-prd -> your-name/update-prd
 ```
 
